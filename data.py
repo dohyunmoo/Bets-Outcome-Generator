@@ -34,7 +34,6 @@ def get_event_data(date): # from sportsdata.io
         for i in range(len(sample)):
             if sample[i]["Day"][:10] == date:
                 return sample[i]["EventId"]
-            
     else:
         sys.exit(f'Error w/ request status code: {response.status_code}')
 
@@ -65,8 +64,6 @@ def get_event_result(eventID):
 
     else:
         sys.exit(f'Error w/ request status code: {response.status_code}')
-
-# main_data = extract_data()
 
 if __name__ == "__main__":
     get_event_result(get_event_data('2023-01-14'))

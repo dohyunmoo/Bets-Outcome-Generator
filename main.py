@@ -32,12 +32,14 @@ class window:
         self.label_arr_left = []
         self.label_arr_right = []
 
-        fight_night_date = None
+        self.fight_night_date = None
 
-        for i in range(len(data.main_data)):
-            if data.main_data[i]["commence_time"][:10] == saturday or data.main_data[i]["commence_time"][:10] == sunday:
-                fight_night_date = f'{saturday} / {sunday}'
-                content = data.main_data[i]["bookmakers"]
+        self.main_data = data.extract_data()
+
+        for i in range(len(self.main_data)):
+            if self.main_data[i]["commence_time"][:10] == saturday or self.main_data[i]["commence_time"][:10] == sunday:
+                self.fight_night_date = f'{saturday} / {sunday}'
+                content = self.main_data[i]["bookmakers"]
                 for j in range(len(content)):
                     if content[j]["key"] == 'draftkings':
                         self.label_arr_left.append(content[j]["markets"][0]["outcomes"][0])
@@ -47,7 +49,7 @@ class window:
             print("Error in the matches...")
             sys.exit()
         
-        title = f'UFC FIGHT on {fight_night_date}'
+        title = f'UFC FIGHT on {self.fight_night_date}'
 
         tk.Label(main, text=title).grid(row=0, column=2, columnspan=2, sticky=tk.NSEW, padx=10, pady=5)
         main.title(title)
@@ -71,23 +73,25 @@ class window:
             odd_right.grid(row=i+1, column=4, sticky=tk.E, pady=5)
             l_right.grid(row=i+1, column=5, sticky=tk.E, pady=5)
 
-        calculate_button = tk.Button(main, text="Calculate", command=lambda: self.create_json(self.entry_arr_left, self.entry_arr_right))
+        calculate_button = tk.Button(main, text="Calculate", command=self.create_json)
         calculate_button.grid(row=len(self.label_arr_left)+1, column=2, columnspan=2, sticky=tk.NSEW, padx=10, pady=5)
 
-    def create_json(self, input_left, input_right):
-        if len(input_left) != len(self.label_arr_left) or len(input_right) != len(self.label_arr_right):
+    def create_json(self):
+        if len(self.entry_arr_left) != len(self.label_arr_left) or len(self.entry_arr_right) != len(self.label_arr_right):
             print("the number of inputs on both sides do not match")
             sys.exit()
 
-        for i in range(len(input_left)):
-            if isNum(input_left[i]):
-                total_data.update({self.label_arr_left[i]['name']: {'odd': self.label_arr_left[i]['price'], 'amount': input_left[i]}})
-            elif isNum(input_right[i]):
-                total_data.update({self.label_arr_right[i]['name']: {'odd': self.label_arr_right[i]['price'], 'amount': input_right[i]}})
+        total_data.update({"Fight-Date": self.fight_night_date})
+
+        for i in range(len(self.entry_arr_left)):
+            if isNum(self.entry_arr_left[i]):
+                total_data.update({f'data{i}': {'name': self.label_arr_left[i]['name'], 'odd': self.label_arr_left[i]['price'], 'amount': self.entry_arr_left[i]}})
+            elif isNum(self.entry_arr_right[i]):
+                total_data.update({f'data{i}': {"name": self.label_arr_right[i]['name'], 'odd': self.label_arr_right[i]['price'], 'amount': self.entry_arr_right[i]}})
             else:
                 pass
         
-        filename = "bets.json"
+        filename = f"{self.fight_night_date}.json"
 
         if os.path.exists(filename):
             os.remove(filename)
