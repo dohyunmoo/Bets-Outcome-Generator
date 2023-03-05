@@ -31,17 +31,20 @@ def main():
             sys.exit()
 
     total_payout = 0
+    total_invested = 0
 
     winners_list = data.get_event_result(data.get_event_data(final_date))
 
     for i in range(len(main_data)):
+        total_invested += float(main_data[f'data{i}']['amount'])
+
         for j in range(len(winners_list)):          
             if main_data[f'data{i}']['name'] == winners_list[j]:
-                total_payout += main_data[f'data{i}']['odd'] * main_data[f'data{i}']['amount']
+                total_payout += float(main_data[f'data{i}']['odd']) * float(main_data[f'data{i}']['amount'])
             else:
                 pass
 
-    return total_payout
+    return total_payout - total_invested # profit
 
 if __name__ == '__main__':
     print(main())

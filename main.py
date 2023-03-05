@@ -81,8 +81,6 @@ class window:
             print("the number of inputs on both sides do not match")
             sys.exit()
 
-        total_data.update({"Fight-Date": self.fight_night_date})
-
         for i in range(len(self.entry_arr_left)):
             if isNum(self.entry_arr_left[i]):
                 total_data.update({f'data{i}': {'name': self.label_arr_left[i]['name'], 'odd': self.label_arr_left[i]['price'], 'amount': self.entry_arr_left[i]}})
