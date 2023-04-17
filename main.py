@@ -33,12 +33,14 @@ class window:
         self.label_arr_right = []
 
         self.fight_night_date = None
+        self.fight_night_saturday = saturday
+        self.fight_night_sunday = sunday
 
         self.main_data = data.extract_data()
 
         for i in range(len(self.main_data)):
             if self.main_data[i]["commence_time"][:10] == saturday or self.main_data[i]["commence_time"][:10] == sunday:
-                self.fight_night_date = f'{saturday} / {sunday}'
+                self.fight_night_date = f'{saturday}/{sunday}'
                 content = self.main_data[i]["bookmakers"]
                 for j in range(len(content)):
                     if content[j]["key"] == 'draftkings':
@@ -82,14 +84,21 @@ class window:
             sys.exit()
 
         for i in range(len(self.entry_arr_left)):
-            if isNum(self.entry_arr_left[i]):
-                total_data.update({f'data{i}': {'name': self.label_arr_left[i]['name'], 'odd': self.label_arr_left[i]['price'], 'amount': self.entry_arr_left[i]}})
-            elif isNum(self.entry_arr_right[i]):
-                total_data.update({f'data{i}': {"name": self.label_arr_right[i]['name'], 'odd': self.label_arr_right[i]['price'], 'amount': self.entry_arr_right[i]}})
+            # if isNum(self.entry_arr_left[i]):
+            if self.entry_arr_left[i].get().isnumeric():
+                total_data.update({f'data{i}': {'name': self.label_arr_left[i]['name'], 'odd': self.label_arr_left[i]['price'], 'amount': self.entry_arr_left[i].get()}})
+            elif self.entry_arr_right[i].get().isnumeric():
+            # elif isNum(self.entry_arr_right[i]):
+                total_data.update({f'data{i}': {"name": self.label_arr_right[i]['name'], 'odd': self.label_arr_right[i]['price'], 'amount': self.entry_arr_right[i].get()}})
             else:
                 pass
+
+        # print(self.entry_arr_left[0].get())
+        # print(type(self.entry_arr_left[0].get()))
+
+        print(total_data)
         
-        filename = f"{self.fight_night_date}.json"
+        filename = f"{self.fight_night_saturday}_{self.fight_night_sunday}_Fight_Night.json"
 
         if os.path.exists(filename):
             os.remove(filename)
