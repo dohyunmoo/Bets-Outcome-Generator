@@ -18,7 +18,7 @@ def main():
     last_sat, last_sun = get_last_weekend()
     final_date = None
     try:
-        with open(f"{last_sat}.json", "r") as f:
+        with open(f"{last_sat}_{last_sun}_Fight_Night.json", "r") as f:
             main_data = json.load(f)
             final_date = last_sat
     except:
