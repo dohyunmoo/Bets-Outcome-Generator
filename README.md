@@ -10,7 +10,7 @@ python main.py
 2. Enter amount you want to place on the fighters (if you placed bets for both of the fighters fighting each other, the higher ranked fighter will be considered)
 3. Click the button below to generate a json file with your bets
 4. Run the script to calculate the amount you would have won after the fight is completed
-5. ```
-6. python results.py
-7. ```
-8. <mark>Make sure that your date_date_Fight_Night.json is in the same directory as the rest of the python files</mark>
+```
+python results.py
+```
+<mark>Make sure that your date_date_Fight_Night.json is in the same directory as the rest of the python files</mark>
